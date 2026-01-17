@@ -69,6 +69,18 @@ const Hero: React.FC = () => {
     <section className="relative w-full flex items-center justify-center overflow-hidden bg-brand-black h-screen md:h-[70vh]">
       {/* Background Videos Container */}
       <div className="absolute inset-0 w-full h-full">
+        {/* 포스터 이미지 폴백 - 비디오 로딩 전 표시 */}
+        <div
+          className={`absolute inset-0 w-full h-full transition-opacity duration-700 ${
+            isVideoLoaded ? "opacity-0" : "opacity-60"
+          }`}
+          style={{
+            backgroundImage: "url('/images/hero-bg.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+
         {/* 현재 재생 중인 비디오 */}
         <video
           ref={videoRef}
@@ -76,6 +88,7 @@ const Hero: React.FC = () => {
           autoPlay
           muted
           playsInline
+          poster="/images/hero-bg.png"
           onEnded={handleVideoEnded}
           onLoadedData={handleVideoLoaded}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
