@@ -1,8 +1,53 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { MapPin, Mail, ArrowUpRight } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
+
+interface MultiLangText {
+  ko: string;
+  en: string;
+  de?: string;
+  zh?: string;
+}
 
 const Contact: React.FC = () => {
+  const { lang } = useLanguage();
+  const getText = (text: MultiLangText) => text[lang] || text.en || text.ko;
+
+  const TEXTS = {
+    subtitle: {
+      ko: "현장에서 결과를 증명할 준비가 되셨나요?\n신뢰와 실행에 기반한 파트너십을 위해 연락주세요.",
+      en: "Ready to prove results in the field?\nContact us for a partnership built on trust and action.",
+      de: "Bereit, Ergebnisse vor Ort zu beweisen?\nKontaktieren Sie uns für eine Partnerschaft basierend auf Vertrauen und Handeln.",
+      zh: "准备好在现场证明结果了吗？\n联系我们，建立基于信任和行动的合作伙伴关系。",
+    },
+    address: {
+      ko: "서울특별시 강남구 크리에이티브 애비뉴 123",
+      en: "123 Creative Avenue, Gangnam-gu, Seoul, South Korea",
+      de: "123 Creative Avenue, Gangnam-gu, Seoul, Südkorea",
+      zh: "韩国首尔江南区创意大道123号",
+    },
+    responseTime: {
+      ko: "24시간 이내 답변 드립니다.",
+      en: "Response within 24 hours.",
+      de: "Antwort innerhalb von 24 Stunden.",
+      zh: "24小时内回复。",
+    },
+    inquiries: {
+      ko: "문의",
+      en: "INQUIRIES",
+      de: "ANFRAGEN",
+      zh: "咨询",
+    },
+    addressLabel: {
+      ko: "주소",
+      en: "ADDRESS",
+      de: "ADRESSE",
+      zh: "地址",
+    },
+  };
+
   return (
     <footer
       id="contact"
@@ -10,7 +55,7 @@ const Contact: React.FC = () => {
     >
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-32">
-          {/* Left: CTA - Premium "Execution" Pattern */}
+          {/* Left: CTA */}
           <div className="flex flex-col justify-between">
             <div>
               <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold uppercase tracking-tighter mb-8 leading-none">
@@ -18,8 +63,14 @@ const Contact: React.FC = () => {
                 <span className="text-brand-accent">Execution.</span>
               </h2>
               <p className="text-gray-400 max-w-md text-lg leading-relaxed">
-                Ready to prove results in the field? <br />
-                Contact us for a partnership built on trust and action.
+                {getText(TEXTS.subtitle)
+                  .split("\n")
+                  .map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      {i === 0 && <br />}
+                    </span>
+                  ))}
               </p>
             </div>
 
@@ -37,12 +88,12 @@ const Contact: React.FC = () => {
             </div>
           </div>
 
-          {/* Right: Info Card with Glassmorphism */}
+          {/* Right: Info Card */}
           <div className="glass p-10 md:p-14 hover-glow">
             <div className="space-y-14">
               <div>
                 <h4 className="text-xs font-bold text-brand-accent/80 uppercase tracking-widest mb-5">
-                  ADDRESS
+                  {getText(TEXTS.addressLabel)}
                 </h4>
                 <div className="flex items-start gap-4">
                   <MapPin
@@ -50,16 +101,14 @@ const Contact: React.FC = () => {
                     size={22}
                   />
                   <p className="text-xl leading-relaxed">
-                    123 Creative Avenue, Gangnam-gu,
-                    <br />
-                    Seoul, South Korea
+                    {getText(TEXTS.address)}
                   </p>
                 </div>
               </div>
 
               <div>
                 <h4 className="text-xs font-bold text-brand-accent/80 uppercase tracking-widest mb-5">
-                  INQUIRIES
+                  {getText(TEXTS.inquiries)}
                 </h4>
                 <div className="flex items-start gap-4">
                   <Mail className="text-brand-accent shrink-0 mt-1" size={22} />
@@ -68,7 +117,7 @@ const Contact: React.FC = () => {
                       master@bbpartners.co.kr
                     </p>
                     <p className="text-sm text-gray-500 mt-3">
-                      Response within 24 hours.
+                      {getText(TEXTS.responseTime)}
                     </p>
                   </div>
                 </div>
@@ -78,7 +127,6 @@ const Contact: React.FC = () => {
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          {/* Footer Logo */}
           <div className="opacity-60 hover:opacity-100 transition-opacity duration-300">
             <Image
               src="/images/bblogo_white.png"
