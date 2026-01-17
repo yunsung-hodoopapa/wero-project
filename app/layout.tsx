@@ -55,27 +55,26 @@ export const metadata: Metadata = {
   openGraph: {
     title: "bbpartners | Just Execution",
     description:
-      "Execution Without Excuses. 럭셔리 브랜드 경험의 새로운 기준, 더블비 파트너스입니다.",
+      "We never say no. Just Execution. BMW, Audi 등 프리미엄 브랜드와 15년 이상 함께한 럭셔리 BTL 실행 파트너.",
     url: "https://bbpartners.co.kr",
     siteName: "bbpartners",
     locale: "ko_KR",
     type: "website",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1493238792000-8113da705763?q=80&w=2070&auto=format&fit=crop",
+        url: "/images/og-image.png",
         width: 1200,
         height: 630,
-        alt: "bbpartners Dark Luxury Aesthetic",
+        alt: "bbpartners - Just Execution | 럭셔리 브랜드 BTL 파트너",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "bbpartners | Just Execution",
-    description: "We never say no. Just Execution. 럭셔리 브랜드 실행 파트너.",
-    images: [
-      "https://images.unsplash.com/photo-1493238792000-8113da705763?q=80&w=2070&auto=format&fit=crop",
-    ],
+    description:
+      "We never say no. Just Execution. 프리미엄 브랜드 BTL 실행 파트너.",
+    images: ["/images/og-image.png"],
   },
   robots: {
     index: true,
