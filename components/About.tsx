@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface TextBlockProps {
   kor: string;
@@ -32,50 +33,24 @@ const useInView = (threshold = 0.1) => {
   return { ref, isVisible };
 };
 
-const TextReveal: React.FC<TextBlockProps> = ({ kor, eng }) => {
-  const [isHovered, setIsHovered] = useState(false);
+// Context 기반 언어 전환 (호버 대신 글로벌 언어 설정 사용)
+const TextBlock: React.FC<TextBlockProps> = ({ kor, eng }) => {
+  const { lang } = useLanguage();
+  const text = lang === "ko" ? kor : eng;
 
   return (
-    <div
-      className="group relative cursor-default"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="relative w-full transition-all duration-500">
-        {/* Korean Text (Default) */}
-        <div
-          className={`relative transition-all duration-500 ease-in-out ${
-            isHovered
-              ? "opacity-0 translate-y-[-10px]"
-              : "opacity-100 translate-y-0"
-          }`}
-        >
-          <p className="text-lg md:text-xl text-gray-300 leading-loose break-keep">
-            {kor.split("\n").map((line, i) => (
-              <span key={i} className="block mb-1">
-                {line}
-              </span>
-            ))}
-          </p>
-        </div>
-
-        {/* English Text (Hover) */}
-        <div
-          className={`absolute top-0 left-0 right-0 transition-opacity duration-500 ease-in-out ${
-            isHovered
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-[10px]"
-          }`}
-        >
-          <p className="text-lg md:text-xl text-brand-accent font-heading leading-loose">
-            {eng.split("\n").map((line, i) => (
-              <span key={i} className="block mb-1">
-                {line}
-              </span>
-            ))}
-          </p>
-        </div>
-      </div>
+    <div className="relative w-full">
+      <p
+        className={`text-lg md:text-xl leading-loose break-keep transition-colors duration-300 ${
+          lang === "ko" ? "text-gray-300" : "text-brand-accent font-heading"
+        }`}
+      >
+        {text.split("\n").map((line, i) => (
+          <span key={i} className="block mb-1">
+            {line}
+          </span>
+        ))}
+      </p>
     </div>
   );
 };
@@ -101,7 +76,7 @@ const About: React.FC = () => {
           <h3 className="text-brand-accent font-bold tracking-widest uppercase mb-8 text-xs md:text-sm">
             WHO WE ARE
           </h3>
-          <TextReveal
+          <TextBlock
             kor={`더블비 파트너스는 Blood Brother의 마인드 위에 세워진 Best Brand Partner 입니다.\n우리는 15년이 넘는 럭셔리 & 프리미엄 브랜드 경험을 바탕으로,\n브랜드의 목표를 현실로 만드는 현장 중심 실행 파트너십을 지향합니다.`}
             eng={`BB Partners is a Best Brand Partner built upon the mindset of Blood Brother.\nWith over 15 years of experience across luxury and premium brands,\nwe strive to be a field-driven execution partnership that turns brand goals into reality.`}
           />
@@ -127,7 +102,7 @@ const About: React.FC = () => {
                 Be the lead.
               </h4>
             </div>
-            <TextReveal
+            <TextBlock
               kor={`더블비 파트너스의 비전은 기존의 방식을 따라가는 것이 아니라,\n누구보다 먼저 기준을 정의하고 그 기준을 실행으로 증명하는 조직이 되는 것입니다.\n우리는 럭셔리 경험의 실행 기준이 되어, 업계의 방향을 선도합니다.`}
               eng={`The vision of BB Partners is not to follow existing standards,\nbut to define new standards first — and prove them through execution.\nWe aim to become the execution benchmark in luxury brand experiences and a partner that leads the direction of the industry.`}
             />
@@ -151,7 +126,7 @@ const About: React.FC = () => {
                 Without Excuses.
               </h4>
             </div>
-            <TextReveal
+            <TextBlock
               kor={`더블비 파트너스의 미션은 어떤 상황에서도 변명하지 않고, 실행으로 답하는 것입니다.\n복잡한 요구와 높은 긴장도의 현장에서도 우리는 설명보다 행동을 선택합니다.\n모든 서비스 영역에서 결과로 신뢰를 증명하는 실행 파트너입니다.`}
               eng={`The mission of BB Partners is to respond through execution — without excuses, in any situation.\nEven in complex demands and high-pressure environments, we choose action over explanation.\nAcross every service domain, BB Partners stands as an execution partner that proves trust through results.`}
             />

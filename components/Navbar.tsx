@@ -1,17 +1,24 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe, ChevronDown } from "lucide-react";
+import {
+  useLanguage,
+  LANGUAGE_ORDER,
+  LANGUAGE_LABELS,
+  Language,
+} from "../contexts/LanguageContext";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
   const pathname = usePathname();
+  const { lang, setLang } = useLanguage();
+  const langRef = useRef<HTMLDivElement>(null);
 
-  // PC에서는 페이지 라우트, Mobile에서는 동일한 링크 사용
-  // 모바일에서 SPA 경험은 page.tsx의 CSS hidden/block으로 처리됨
   const navLinks = [
     { name: "ABOUT", href: "/about" },
     { name: "BUSINESS", href: "/services" },
@@ -20,19 +27,29 @@ const Navbar: React.FC = () => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleClickOutside = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setIsLangOpen(false);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handleClickOutside);
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };
+
+  const currentLangLabel = lang.toUpperCase();
 
   return (
     <nav
@@ -72,16 +89,91 @@ const Navbar: React.FC = () => {
               {link.name}
             </Link>
           ))}
+
+          {/* Language Dropdown */}
+          <div className="relative" ref={langRef}>
+            <button
+              onClick={() => setIsLangOpen(!isLangOpen)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 hover:border-brand-accent/50 transition-all duration-300 group"
+              aria-label="Select language"
+            >
+              <Globe
+                size={14}
+                className="text-gray-400 group-hover:text-brand-accent"
+              />
+              <span className="text-xs font-medium tracking-wider text-brand-accent">
+                {currentLangLabel}
+              </span>
+              <ChevronDown
+                size={12}
+                className={`text-gray-400 transition-transform ${isLangOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {/* Dropdown Menu */}
+            {isLangOpen && (
+              <div className="absolute top-full right-0 mt-2 py-2 bg-brand-dark/95 backdrop-blur-lg border border-white/10 rounded-lg shadow-xl min-w-[120px]">
+                {LANGUAGE_ORDER.map((code) => (
+                  <button
+                    key={code}
+                    onClick={() => {
+                      setLang(code);
+                      setIsLangOpen(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                      lang === code
+                        ? "text-brand-accent bg-white/5"
+                        : "text-gray-300 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    <span className="font-medium">{code.toUpperCase()}</span>
+                    <span className="text-xs text-gray-500 ml-2">
+                      {LANGUAGE_LABELS[code]}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-white"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        {/* Mobile: Language + Menu Toggle */}
+        <div className="md:hidden flex items-center gap-4">
+          <button
+            onClick={() => setIsLangOpen(!isLangOpen)}
+            className="text-sm text-brand-accent font-medium"
+          >
+            {currentLangLabel}
+          </button>
+
+          <button
+            className="text-white"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Language Dropdown */}
+      {isLangOpen && (
+        <div className="md:hidden absolute top-full right-4 mt-2 py-2 bg-brand-dark/95 backdrop-blur-lg border border-white/10 rounded-lg shadow-xl min-w-[120px]">
+          {LANGUAGE_ORDER.map((code) => (
+            <button
+              key={code}
+              onClick={() => {
+                setLang(code);
+                setIsLangOpen(false);
+              }}
+              className={`w-full px-4 py-2 text-left text-sm ${
+                lang === code ? "text-brand-accent" : "text-gray-300"
+              }`}
+            >
+              {code.toUpperCase()} - {LANGUAGE_LABELS[code]}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
