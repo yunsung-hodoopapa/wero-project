@@ -40,7 +40,7 @@ const Services: React.FC = () => {
   const services: ServiceItem[] = [
     {
       icon: <Lightbulb size={32} />,
-      title: "EXPERIENTIAL / CONTENTS",
+      title: "EXPERIENTIAL / CONTENTS CREATIVES",
       items: [
         {
           ko: "몰입형 브랜드 경험의 컨셉, 디자인 및 실행",

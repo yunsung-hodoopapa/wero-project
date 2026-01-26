@@ -63,13 +63,21 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative h-12 w-44 flex items-center">
+            {/* Neon glow effect behind logo */}
+            <div
+              className="absolute inset-0 rounded-lg blur-xl opacity-60"
+              style={{
+                background:
+                  "radial-gradient(ellipse at center, rgba(241, 156, 48, 0.4) 0%, rgba(241, 156, 48, 0.1) 50%, transparent 70%)",
+              }}
+            />
             <Image
-              src="/images/bblogo_white.png"
+              src="/images/bblogo_final.png"
               alt="BB Partners"
               width={180}
               height={48}
               priority
-              className="object-contain"
+              className="object-contain relative z-10 drop-shadow-[0_0_8px_rgba(241,156,48,0.5)]"
             />
           </div>
         </Link>
