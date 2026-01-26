@@ -23,10 +23,10 @@ const Contact: React.FC = () => {
       zh: "准备好在现场证明结果了吗？\n联系我们，建立基于信任和行动的合作伙伴关系。",
     },
     address: {
-      ko: "서울특별시 강남구 크리에이티브 애비뉴 123",
-      en: "123 Creative Avenue, Gangnam-gu, Seoul, South Korea",
-      de: "123 Creative Avenue, Gangnam-gu, Seoul, Südkorea",
-      zh: "韩国首尔江南区创意大道123号",
+      ko: "서울특별시 동작구 장승배기로 10길 130, 203호",
+      en: "Unit 203, 130, Jangseungbaegi-ro 10-gil, Dongjak-gu, Seoul, 06966, Korea",
+      de: "Unit 203, 130, Jangseungbaegi-ro 10-gil, Dongjak-gu, Seoul, 06966, Korea",
+      zh: "韩国首尔铜雀区长承培基路10街130号203室, 06966",
     },
     responseTime: {
       ko: "24시간 이내 답변 드립니다.",
