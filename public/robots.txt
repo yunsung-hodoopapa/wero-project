@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+
+# Yeti
+User-agent: Yeti
+Allow: /
+
+# Host
+Host: https://bbpartners.co.kr
+
+# Sitemaps
+Sitemap: https://bbpartners.co.kr/sitemap.xml
