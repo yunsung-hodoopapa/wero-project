@@ -88,6 +88,11 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    other: {
+      "naver-site-verification": "naveref30bf888597aba2eceec9eb6ac4fab0",
+    },
+  },
 };
 
 export const viewport: Viewport = {
