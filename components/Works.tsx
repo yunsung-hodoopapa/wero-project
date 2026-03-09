@@ -10,7 +10,7 @@ import {
   Calendar,
 } from "lucide-react";
 
-interface Project {
+export interface Project {
   year: string;
   title: string;
   subtitle: string;
@@ -23,7 +23,11 @@ interface Project {
 
 const INITIAL_SHOW_COUNT = 6;
 
-const Works: React.FC = () => {
+interface WorksProps {
+  dbProjects?: Project[];
+}
+
+const Works: React.FC<WorksProps> = ({ dbProjects = [] }) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAll, setShowAll] = useState(false);
@@ -292,11 +296,14 @@ const Works: React.FC = () => {
     },
   ];
 
+  // Combine DB projects (newest) with the hardcoded projects
+  const allProjects = [...dbProjects, ...projectsData];
+
   // Display projects based on showAll state
   const displayedProjects = showAll
-    ? projectsData
-    : projectsData.slice(0, INITIAL_SHOW_COUNT);
-  const remainingCount = projectsData.length - INITIAL_SHOW_COUNT;
+    ? allProjects
+    : allProjects.slice(0, INITIAL_SHOW_COUNT);
+  const remainingCount = allProjects.length - INITIAL_SHOW_COUNT;
 
   const openModal = (project: Project) => {
     setSelectedProject(project);

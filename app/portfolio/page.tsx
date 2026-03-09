@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Navbar from "../../components/Navbar";
-import Works from "../../components/Works";
+import Works, { Project } from "../../components/Works";
 import { MobileRedirect } from "../../components/MobileRedirect";
+import { createClient } from "@/utils/supabase/server";
 
 export const metadata: Metadata = {
   title: "포트폴리오",
@@ -31,14 +32,45 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const supabase = await createClient();
+  const { data: portfolios } = await supabase
+    .from("portfolios")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  const customProjects: Project[] = (portfolios || []).map((p: any) => {
+    const fallbackYear = (() => {
+      const d = new Date(p.created_at);
+      return `${d.getFullYear()}/${d.getMonth() + 1}`;
+    })();
+    return {
+      year: p.project_year || fallbackYear,
+      title: p.title,
+      subtitle: p.description || p.venue || "",
+      client: p.client || "",
+      venue: p.venue || "",
+      tags: p.tags || [],
+      img: p.image_url,
+      gallery: p.gallery || [],
+    };
+  });
+
   return (
     <MobileRedirect targetSection="portfolio">
       <div className="bg-brand-black min-h-screen text-white font-sans selection:bg-brand-accent selection:text-black">
         <Navbar />
         <main className="pt-20">
-          <Works />
+          <Works dbProjects={customProjects} />
         </main>
+
+        {/* 임시 테스트를 위한 숨겨진 관리자 접속 버튼 */}
+        <a
+          href="/portfolio?admin=true"
+          className="fixed bottom-4 right-4 z-40 w-8 h-8 opacity-0 hover:opacity-100 flex items-center justify-center bg-gray-500 rounded-full text-white cursor-pointer"
+        >
+          A
+        </a>
       </div>
     </MobileRedirect>
   );
